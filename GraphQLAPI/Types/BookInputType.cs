@@ -8,7 +8,7 @@ namespace GraphQLAPI.Types
     {
 		public BookInputType()
 		{
-			Name = "BookInput";
+			Name = "BookInputType";
             Field<NonNullGraphType<StringGraphType>>("name");
 			Field<NonNullGraphType<IntGraphType>>("authorId");
         }
