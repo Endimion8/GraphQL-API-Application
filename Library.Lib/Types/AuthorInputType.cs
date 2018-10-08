@@ -1,7 +1,7 @@
 ﻿using System;
 using GraphQL.Types;
 
-namespace GraphQLAPI.Types
+namespace GraphQLAPI.Library.Lib.Types
 {
 	public class AuthorInputType : InputObjectGraphType
     {

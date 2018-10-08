@@ -2,7 +2,7 @@
 using GraphQL;
 using GraphQL.Types;
 
-namespace GraphQLAPI
+namespace GraphQLAPI.Library.Lib
 {
     public class LibrarySchema : Schema
     {

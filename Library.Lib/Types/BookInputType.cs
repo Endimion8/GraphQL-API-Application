@@ -1,8 +1,7 @@
 ﻿using System;
 using GraphQL.Types;
-using GraphQLAPI.Models;
 
-namespace GraphQLAPI.Types
+namespace GraphQLAPI.Library.Lib.Types
 {
 	public class BookInputType : InputObjectGraphType
     {

@@ -1,11 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
+﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using System;
-using System.Collections.Generic;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace GraphQLAPI.Migrations
+namespace Library.Dal.Migrations
 {
-    public partial class Initial : Migration
+    public partial class BooksRemoveAuthors : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,8 +14,8 @@ namespace GraphQLAPI.Migrations
                 {
                     AuthorId = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    Birthdate = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: true),
+                    Birthdate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -29,8 +28,8 @@ namespace GraphQLAPI.Migrations
                 {
                     BookId = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    AuthorId = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: true),
+                    AuthorId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
