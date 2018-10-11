@@ -1,12 +1,13 @@
 ﻿using GraphQL.DataLoader;
 using GraphQL.Types;
-using GraphQLAPI.Library.Dal.Models;
+using GraphQLAPI.Library.Lib;
+using GraphQLAPI.Providers.Library.Models.Response;
 
-namespace GraphQLAPI.Library.Lib.Types
+namespace GraphQLAPI.Types
 {
-    public class BookType : ObjectGraphType<Book>
+    public class BookType : ObjectGraphType<BookResponse>
     {
-        public BookType(ILibraryService libraryService, IDataLoaderContextAccessor accessor)
+        public BookType(ILibraryService libraryService)
         {
             Field(x => x.BookId).Description("Id книги");
             Field(x => x.Name).Description("Название книги");

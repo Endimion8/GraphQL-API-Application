@@ -8,6 +8,9 @@ using Microsoft.Extensions.DependencyInjection;
 using GraphQL.DataLoader;
 using GraphQLAPI.Library.Lib;
 using Library.Lib;
+using GraphQL.Types;
+using GraphQLAPI.Types;
+using GraphQLAPI.InputTypes;
 
 namespace GraphQLAPI
 {
@@ -34,15 +37,25 @@ namespace GraphQLAPI
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
 		{
-            services.AddLibrary(Configuration);
-
             services.AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));
 
             services.AddSingleton<IDocumentWriter, DocumentWriter>();
             services.AddSingleton<IDocumentExecuter, DocumentExecuter>();
 
-			services.AddSingleton<IDataLoaderContextAccessor, DataLoaderContextAccessor>();
+            services.AddSingleton<IDataLoaderContextAccessor, DataLoaderContextAccessor>();
             services.AddSingleton<DataLoaderDocumentListener>();
+
+            services.AddScoped<ILibraryQuery, LibraryQuery>();
+            services.AddScoped<ILibraryMutation, LibraryMutation>();
+            services.AddScoped<ISchema, LibrarySchema>();
+
+            services.AddScoped<AuthorType>();
+            services.AddScoped<AuthorInputType>();
+
+            services.AddScoped<BookType>();
+            services.AddScoped<BookInputType>();
+
+            services.AddLibrary(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,7 +67,6 @@ namespace GraphQLAPI
             app.UseMiddleware<GraphQLMiddleware>();
             ApplicationDatabaseInitializer.Initialize(app);
             InitDatabase.Init(app);
-
         }
     }
 }

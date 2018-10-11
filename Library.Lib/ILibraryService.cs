@@ -3,28 +3,29 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using GraphQLAPI.Library.Dal.Models;
+using GraphQLAPI.Library.Lib.Response;
 
 namespace GraphQLAPI.Library.Lib
 {
     public interface ILibraryService
     {
-        Task<IEnumerable<Author>> GetAuthorsAsync();
-		Task<Author> GetAuthorByIdAsync(int autorId);
+        Task<IEnumerable<AuthorResponseLib>> GetAuthorsAsync();
+		Task<AuthorResponseLib> GetAuthorByIdAsync(int autorId);
 		Task<Dictionary<int, Author>> GetAuthorsByIdAsync(IEnumerable<int> authorIds, CancellationToken token);
-        Task<Author> CreateAuthorAsync(Author author);
-        Author UpdateAuthor(int id, Author author);
-        Task<Author> DeleteAuthorAsync(int autorId);
-        Task<Author> DeleteAuthorByNameAsync(string authorName);
+        Task<AuthorResponseLib> CreateAuthorAsync(AuthorResponseLib author);
+        AuthorResponseLib UpdateAuthor(AuthorResponseLib author);
+        Task<AuthorResponseLib> DeleteAuthorAsync(int autorId);
+        Task<AuthorResponseLib> DeleteAuthorByNameAsync(string authorName);
 
-		Task<IEnumerable<Book>> GetBooksAsync();
-		Task<Book> GetBookByIdAsync(int bookId);
+		Task<IEnumerable<BookResponseLib>> GetBooksAsync();
+		Task<BookResponseLib> GetBookByIdAsync(int bookId);
         Task<Dictionary<int, Book>> GetBooksByIdAsync(IEnumerable<int> bookIds, CancellationToken token);
-		Task<IEnumerable<Book>> GetBooksByAuthorIdAsync(int authorId);
-		Task<ILookup<int, Book>> GetBooksByAuthorIdsAsync(IEnumerable<int> authorIds);
-		Task<Book> CreateBookAsync(Book book);
-		Book UpdateBook(int id, Book book);
-        Task<Book> DeleteBookAsync(int bookId);
-        Task<Book> DeleteBookByNameAsync(string bookName);
+		Task<IEnumerable<BookResponseLib>> GetBooksByAuthorIdAsync(int authorId);
+		Task<List<BookResponseLib>> GetBooksByAuthorIdsAsync(IEnumerable<int> authorIds);
+		Task<BookResponseLib> CreateBookAsync(BookResponseLib book);
+        BookResponseLib UpdateBook(BookResponseLib book);
+        Task<BookResponseLib> DeleteBookAsync(int bookId);
+        Task<BookResponseLib> DeleteBookByNameAsync(string bookName);
 
     }
 }
