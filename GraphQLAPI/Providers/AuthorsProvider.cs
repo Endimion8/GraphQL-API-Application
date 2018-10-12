@@ -19,43 +19,43 @@ namespace GraphQLAPI.Providers
             _mapper = mapper;
             _libraryService = libraryService;
         }
-        public async Task<IEnumerable<AuthorResponse>> GetAuthorsAsync()
+        public async Task<IEnumerable<Library.Models.Response.AuthorResponse>> GetAuthorsAsync()
         {
             var authors = await _libraryService.GetAuthorsAsync();
-            return _mapper.Map<IReadOnlyList<AuthorResponse>>(authors);
+            return _mapper.Map<IReadOnlyList<Library.Models.Response.AuthorResponse>>(authors);
 
         }
 
-        public async Task<AuthorResponse> GetAuthorByIdAsync(int authorId)
+        public async Task<Library.Models.Response.AuthorResponse> GetAuthorByIdAsync(int authorId)
         {
             var author = await _libraryService.GetAuthorByIdAsync(authorId);
-            return _mapper.Map<AuthorResponse>(author);
+            return _mapper.Map<Library.Models.Response.AuthorResponse>(author);
         }
 
-        public async Task<AuthorResponse> CreateAuthorAsync(AuthorResponse author)
+        public async Task<Library.Models.Response.AuthorResponse> CreateAuthorAsync(Library.Models.Response.AuthorResponse author)
         {
-            var addedAuthor = await _libraryService.CreateAuthorAsync(_mapper.Map<AuthorResponseLib>(author));
-            return _mapper.Map<AuthorResponse>(addedAuthor);
+            var addedAuthor = await _libraryService.CreateAuthorAsync(_mapper.Map<GraphQLAPI.Library.Lib.Response.AuthorResponse>(author));
+            return _mapper.Map<Library.Models.Response.AuthorResponse>(addedAuthor);
         }
 
-        public AuthorResponse UpdateAuthor(int id, AuthorResponse author)
+        public AuthorResponse UpdateAuthor(int id, Library.Models.Response.AuthorResponse author)
         {
             author.AuthorId = id;
-            var updatedAuthor = _libraryService.UpdateAuthor(_mapper.Map<AuthorResponseLib>(author));
-            return _mapper.Map<AuthorResponse>(updatedAuthor);
+            var updatedAuthor = _libraryService.UpdateAuthor(_mapper.Map<GraphQLAPI.Library.Lib.Response.AuthorResponse>(author));
+            return _mapper.Map<Library.Models.Response.AuthorResponse>(updatedAuthor);
         }
 
-        public async Task<AuthorResponse> DeleteAuthorAsync(int authorId)
+        public async Task<Library.Models.Response.AuthorResponse> DeleteAuthorAsync(int authorId)
         {
             var deletedAuthor = await _libraryService.DeleteAuthorAsync(authorId);
-            return _mapper.Map<AuthorResponse>(deletedAuthor);
+            return _mapper.Map<Library.Models.Response.AuthorResponse>(deletedAuthor);
 
         }
 
-        public async Task<AuthorResponse> DeleteAuthorByNameAsync(string authorName)
+        public async Task<Library.Models.Response.AuthorResponse> DeleteAuthorByNameAsync(string authorName)
         {
             var deletedAuthor = await _libraryService.DeleteAuthorByNameAsync(authorName);
-            return _mapper.Map<AuthorResponse>(deletedAuthor);
+            return _mapper.Map<Library.Models.Response.AuthorResponse>(deletedAuthor);
         }
     }
 }

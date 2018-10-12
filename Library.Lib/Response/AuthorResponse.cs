@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace GraphQLAPI.Library.Lib.Response
 
 {
-    public class AuthorResponseLib
+    public class AuthorResponse
     {
         public int AuthorId { get; set; }
 

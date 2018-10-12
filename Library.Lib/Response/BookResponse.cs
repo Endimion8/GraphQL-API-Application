@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GraphQLAPI.Library.Lib.Response
 {
-    public class BookResponseLib
+    public class BookResponse
     {
         public int BookId { get; set; }
 

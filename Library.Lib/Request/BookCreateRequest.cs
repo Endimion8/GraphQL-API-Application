@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 
 namespace GraphQLAPI.Library.Lib.Request
-
 {
-    public class AuthorUpdateRequest
+    public class BookCreateRequest
     {
-
         public string Name { get; set; }
 
-        public DateTime Birthdate { get; set; }
+        public int AuthorId { get; set; }
+
     }
 }

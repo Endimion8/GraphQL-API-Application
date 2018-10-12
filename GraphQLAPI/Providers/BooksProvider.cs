@@ -20,54 +20,54 @@ namespace GraphQLAPI.Providers
             _libraryService = libraryService;
         }
 
-        public async Task<IEnumerable<BookResponse>> GetBooksAsync()
+        public async Task<IEnumerable<Library.Models.Response.BookResponse>> GetBooksAsync()
         {
             var books = await _libraryService.GetBooksAsync();
-            return _mapper.Map<IReadOnlyList<BookResponse>>(books);
+            return _mapper.Map<IReadOnlyList<Library.Models.Response.BookResponse>>(books);
         }
 
-        public async Task<BookResponse> GetBookByIdAsync(int bookId)
+        public async Task<Library.Models.Response.BookResponse> GetBookByIdAsync(int bookId)
         {
             var book = await _libraryService.GetBookByIdAsync(bookId);
-            return _mapper.Map<BookResponse>(book);
+            return _mapper.Map<Library.Models.Response.BookResponse>(book);
         }
 
-        public async Task<IEnumerable<BookResponse>> GetBooksByAuthorIdAsync(int authorId)
+        public async Task<IEnumerable<Library.Models.Response.BookResponse>> GetBooksByAuthorIdAsync(int authorId)
         {
             var books = await _libraryService.GetBooksByAuthorIdAsync(authorId);
-            return _mapper.Map<IReadOnlyList<BookResponse>>(books);
+            return _mapper.Map<IReadOnlyList<Library.Models.Response.BookResponse>>(books);
         }
 
-        public async Task<ILookup<int, BookResponse>> GetBooksByAuthorIdsAsync(IEnumerable<int> authorIds)
+        public async Task<ILookup<int, Library.Models.Response.BookResponse>> GetBooksByAuthorIdsAsync(IEnumerable<int> authorIds)
         {
             var books = await _libraryService.GetBooksByAuthorIdsAsync(authorIds);
-            return _mapper.Map<IReadOnlyList<BookResponse>>(books).ToLookup(i => i.AuthorId);
+            return _mapper.Map<IReadOnlyList<Library.Models.Response.BookResponse>>(books).ToLookup(i => i.AuthorId);
         }
 
-        public async Task<BookResponse> CreateBookAsync(BookResponse book)
+        public async Task<Library.Models.Response.BookResponse> CreateBookAsync(Library.Models.Response.BookResponse book)
         {
-            var addedBook = await _libraryService.CreateBookAsync(_mapper.Map<BookResponseLib>(book));
-            return _mapper.Map<BookResponse>(addedBook);
+            var addedBook = await _libraryService.CreateBookAsync(_mapper.Map<GraphQLAPI.Library.Lib.Response.BookResponse>(book));
+            return _mapper.Map<Library.Models.Response.BookResponse>(addedBook);
         }
 
-        public BookResponse UpdateBook(int id, BookResponse book)
+        public BookResponse UpdateBook(int id, Library.Models.Response.BookResponse book)
         {
             book.BookId = id;
-            var updatedBook = _libraryService.UpdateBook(_mapper.Map<BookResponseLib>(book));
-            return _mapper.Map<BookResponse>(updatedBook);
+            var updatedBook = _libraryService.UpdateBook(_mapper.Map<GraphQLAPI.Library.Lib.Response.BookResponse>(book));
+            return _mapper.Map<Library.Models.Response.BookResponse>(updatedBook);
         }
 
-        public async Task<BookResponse> DeleteBookAsync(int bookId)
+        public async Task<Library.Models.Response.BookResponse> DeleteBookAsync(int bookId)
         {
             var book = await _libraryService.DeleteBookAsync(bookId);
-            return _mapper.Map<BookResponse>(book);
+            return _mapper.Map<Library.Models.Response.BookResponse>(book);
 
         }
 
-        public async Task<BookResponse> DeleteBookByNameAsync(string bookName)
+        public async Task<Library.Models.Response.BookResponse> DeleteBookByNameAsync(string bookName)
         {
             var book = await _libraryService.DeleteBookByNameAsync(bookName);
-            return _mapper.Map<BookResponse>(book);
+            return _mapper.Map<Library.Models.Response.BookResponse>(book);
 
         }
     }

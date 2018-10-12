@@ -50,10 +50,10 @@ namespace GraphQLAPI
             services.AddScoped<ISchema, LibrarySchema>();
 
             services.AddScoped<AuthorType>();
-            services.AddScoped<AuthorInputType>();
+            services.AddScoped<AuthorCreateInputType>();
 
             services.AddScoped<BookType>();
-            services.AddScoped<BookInputType>();
+            services.AddScoped<BookCreateInputType>();
 
             services.AddLibrary(Configuration);
         }
