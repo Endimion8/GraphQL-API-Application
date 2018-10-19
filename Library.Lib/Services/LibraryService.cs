@@ -47,10 +47,12 @@ namespace GraphQLAPI.Library.Lib.Services
             return _mapper.Map<AuthorResponse>(addedAuthor.Entity);
         }
 
-        public AuthorResponse UpdateAuthor(int AuthorId, AuthorResponse author)
+        public AuthorResponse UpdateAuthor(int authorId, AuthorUpdateRequest author)
         {
-            // передавать реквест модель и id приделать или находить по ней базе
-            var updatedAuthor = _libraryContext.Authors.Update(_mapper.Map<Author>(author));
+            var authorToUpdate = _mapper.Map<Author>(author);
+            authorToUpdate.AuthorId = authorId;
+
+            var updatedAuthor = _libraryContext.Authors.Update(authorToUpdate);
             _libraryContext.SaveChanges();
             return _mapper.Map<AuthorResponse>(updatedAuthor.Entity); ;
         }
@@ -96,23 +98,25 @@ namespace GraphQLAPI.Library.Lib.Services
             return _mapper.Map<IReadOnlyList<BookResponse>>(books);
 		}
 
-        public async Task<List<BookResponse>> GetBooksByAuthorIdsAsync(IEnumerable<int> authorIds)
+        public async Task<ILookup<int, BookResponse>> GetBooksByAuthorIdsAsync(IEnumerable<int> authorIds)
         {
             var books = await _libraryContext.Books.Where(i => authorIds.Contains(i.AuthorId)).ToListAsync();
-            return _mapper.Map<List<BookResponse>>(books);
+            return _mapper.Map<IReadOnlyList<BookResponse>>(books).ToLookup(i => i.AuthorId);
         }
 
-        public async Task<BookResponse> CreateBookAsync(BookResponse book)
+        public async Task<BookResponse> CreateBookAsync(BookCreateRequest book)
         {
             var addedBook = await _libraryContext.Books.AddAsync(_mapper.Map<Book>(book));
             await _libraryContext.SaveChangesAsync();
             return _mapper.Map<BookResponse>(addedBook.Entity);
         }
 
-        public BookResponse UpdateBook(int bookId, BookResponse book)
+        public BookResponse UpdateBook(int bookId, BookUpdateRequest book)
         {
-            book.BookId = bookId;
-            var updatedBook = _libraryContext.Books.Update(_mapper.Map<Book>(book));
+            var bookToUpdate = _mapper.Map<Book>(book);
+            bookToUpdate.BookId = bookId;
+
+            var updatedBook = _libraryContext.Books.Update(bookToUpdate);
             _libraryContext.SaveChanges();
 
             return _mapper.Map<BookResponse>(updatedBook.Entity); ;

@@ -1,7 +1,7 @@
 ﻿using GraphQL.DataLoader;
 using GraphQL.Types;
 using GraphQLAPI.Library.Lib;
-using GraphQLAPI.Providers.Library.Models.Response;
+using GraphQLAPI.Library.Lib.Response;
 
 namespace GraphQLAPI.Types
 {

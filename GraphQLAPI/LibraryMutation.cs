@@ -2,7 +2,6 @@
 using GraphQLAPI.InputTypes;
 using GraphQLAPI.Library.Lib;
 using GraphQLAPI.Library.Lib.Request;
-using GraphQLAPI.Mutations;
 using GraphQLAPI.Types;
 
 namespace GraphQLAPI
@@ -31,60 +30,60 @@ namespace GraphQLAPI
                     return libraryService.UpdateBook(bookId, book);
                 });
 
-            Field<BookType, Book>()
+            Field<BookType>()
                 .Name("deleteBookByName")
                 .Argument<NonNullGraphType<StringGraphType>>("name", "book name")
-                .ResolveAsync(ctx =>
+                .ResolveAsync(async ctx =>
                 {
                     var name = ctx.GetArgument<string>("name");
-                    return libraryService.DeleteBookByNameAsync(name);
+                    return await libraryService.DeleteBookByNameAsync(name);
                 });
 
-            Field<BookType, Book>()
+            Field<BookType>()
                 .Name("deleteBookById")
                 .Argument<NonNullGraphType<IntGraphType>>("id", "book id")
-                .ResolveAsync(ctx =>
+                .ResolveAsync(async ctx =>
                 {
                     var id = ctx.GetArgument<int>("id");
-                    return libraryService.DeleteBookAsync(id);
+                    return await libraryService.DeleteBookAsync(id);
                 });
 
-            Field<AuthorType, Author>()
+            Field<AuthorType>()
                 .Name("createAuthor")
                 .Argument<NonNullGraphType<AuthorCreateInputType>>("author", "author input")
-                .ResolveAsync(ctx =>
+                .ResolveAsync(async ctx =>
                 {
-                    var author = ctx.GetArgument<Author>("author");
-                    return libraryService.CreateAuthorAsync(author);
+                    var author = ctx.GetArgument<AuthorCreateRequest>("author");
+                    return await libraryService.CreateAuthorAsync(author);
                 });
 
-            Field<AuthorType, Author>()
+            Field<AuthorType>()
                 .Name("updateAuthor")
                 .Argument<NonNullGraphType<IntGraphType>>("authorId", "author id")
                 .Argument<NonNullGraphType<AuthorCreateInputType>>("author", "author input")
                 .Resolve(ctx =>
                 {
                     var authorId = ctx.GetArgument<int>("authorId");
-                    var author = ctx.GetArgument<Author>("author");
+                    var author = ctx.GetArgument<AuthorUpdateRequest>("author");
                     return libraryService.UpdateAuthor(authorId, author);
                 });
 
-            Field<AuthorType, Author>()
+            Field<AuthorType>()
                 .Name("deleteAuthorByName")
                 .Argument<NonNullGraphType<StringGraphType>>("name", "author name")
-                .ResolveAsync(ctx =>
+                .ResolveAsync(async ctx =>
                 {
                     var name = ctx.GetArgument<string>("name");
-                    return libraryService.DeleteAuthorByNameAsync(name);
+                    return await libraryService.DeleteAuthorByNameAsync(name);
                 });
 
-            Field<AuthorType, Author>()
+            Field<AuthorType>()
                 .Name("deleteAuthorById")
                 .Argument<NonNullGraphType<IntGraphType>>("id", "author id")
-                .ResolveAsync(ctx =>
+                .ResolveAsync(async ctx =>
                 {
                     var id = ctx.GetArgument<int>("id");
-                    return libraryService.DeleteAuthorAsync(id);
+                    return await libraryService.DeleteAuthorAsync(id);
                 });
         }
     }

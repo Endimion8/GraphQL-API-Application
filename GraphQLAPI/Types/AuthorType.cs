@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using GraphQL.DataLoader;
 using GraphQL.Types;
-using GraphQLAPI.Providers;
-using GraphQLAPI.Providers.Library.Models.Response;
+using GraphQLAPI.Library.Lib;
+using GraphQLAPI.Library.Lib.Response;
 
 namespace GraphQLAPI.Types
 {
     public class AuthorType : ObjectGraphType<AuthorResponse>
     {
-        public AuthorType(IBooksProvider booksProvider, IDataLoaderContextAccessor accessor)
+        public AuthorType(ILibraryService libraryService, IDataLoaderContextAccessor accessor)
         {
             Field(x => x.AuthorId).Description("Id автора");
             Field(x => x.Name).Description("Имя автора");
@@ -19,7 +19,7 @@ namespace GraphQLAPI.Types
                 .Name("Books")
                 .ResolveAsync(ctx =>
                 {
-                    var booksLoader = accessor.Context.GetOrAddCollectionBatchLoader<int, BookResponse>("GetBooksByAuthorId", booksProvider.GetBooksByAuthorIdsAsync);
+                    var booksLoader = accessor.Context.GetOrAddCollectionBatchLoader<int, BookResponse>("GetBooksByAuthorId", libraryService.GetBooksByAuthorIdsAsync);
                     return booksLoader.LoadAsync(ctx.Source.AuthorId);
                 });
         }

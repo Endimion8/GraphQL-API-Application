@@ -16,7 +16,7 @@ namespace GraphQLAPI.Library.Lib
 		//Task<Dictionary<int, Author>> GetAuthorsByIdAsync(IEnumerable<int> authorIds, CancellationToken token);
 
         Task<AuthorResponse> CreateAuthorAsync(AuthorCreateRequest author);
-        AuthorResponse UpdateAuthor(AuthorUpdateRequest author);
+        AuthorResponse UpdateAuthor(int autorId, AuthorUpdateRequest author);
         Task<AuthorResponse> DeleteAuthorAsync(int autorId);
         Task<AuthorResponse> DeleteAuthorByNameAsync(string authorName);
 
@@ -26,7 +26,7 @@ namespace GraphQLAPI.Library.Lib
         //Task<Dictionary<int, Book>> GetBooksByIdAsync(IEnumerable<int> bookIds, CancellationToken token);
 
 		Task<IEnumerable<BookResponse>> GetBooksByAuthorIdAsync(int authorId);
-		Task<List<BookResponse>> GetBooksByAuthorIdsAsync(IEnumerable<int> authorIds);
+		Task<ILookup<int, BookResponse>> GetBooksByAuthorIdsAsync(IEnumerable<int> authorIds);
 		Task<BookResponse> CreateBookAsync(BookCreateRequest book);
         BookResponse UpdateBook(int bookId, BookUpdateRequest book);
         Task<BookResponse> DeleteBookAsync(int bookId);
