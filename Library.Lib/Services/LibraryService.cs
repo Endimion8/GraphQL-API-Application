@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using GraphQLAPI.Library.Dal;
 using GraphQLAPI.Library.Dal.Models;
 using GraphQLAPI.Library.Lib.Request;
 using GraphQLAPI.Library.Lib.Response;
+using Library.Lib;
 using Microsoft.EntityFrameworkCore;
 
 namespace GraphQLAPI.Library.Lib.Services
@@ -49,7 +49,8 @@ namespace GraphQLAPI.Library.Lib.Services
 
         public AuthorResponse UpdateAuthor(int authorId, AuthorUpdateRequest author)
         {
-            var authorToUpdate = _mapper.Map<Author>(author);
+            Mapper.Initialize(x => x.AddProfile(typeof(LibraryMappingProfile)));
+            var authorToUpdate = Mapper.Map<Author>(author);
             authorToUpdate.AuthorId = authorId;
 
             var updatedAuthor = _libraryContext.Authors.Update(authorToUpdate);
@@ -113,7 +114,8 @@ namespace GraphQLAPI.Library.Lib.Services
 
         public BookResponse UpdateBook(int bookId, BookUpdateRequest book)
         {
-            var bookToUpdate = _mapper.Map<Book>(book);
+            Mapper.Initialize(x => x.AddProfile(typeof(LibraryMappingProfile)));
+            var bookToUpdate = Mapper.Map<Book>(book);
             bookToUpdate.BookId = bookId;
 
             var updatedBook = _libraryContext.Books.Update(bookToUpdate);
