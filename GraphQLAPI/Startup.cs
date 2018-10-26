@@ -57,6 +57,9 @@ namespace GraphQLAPI
             services.AddScoped<BookCreateInputType>();
             services.AddScoped<BookUpdateInputType>();
 
+            services.AddScoped<AuthorBookType>();
+            services.AddScoped<BookToAuthorInputType>();
+
             services.AddLibrary(Configuration);
         }
 

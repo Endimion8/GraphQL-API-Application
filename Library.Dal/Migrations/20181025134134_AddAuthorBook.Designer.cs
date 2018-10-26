@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Library.Dal.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    [Migration("20181005070305_BooksRemoveAuthors")]
-    partial class BooksRemoveAuthors
+    [Migration("20181025134134_AddAuthorBook")]
+    partial class AddAuthorBook
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -40,22 +40,38 @@ namespace Library.Dal.Migrations
                     b.Property<int>("BookId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("AuthorId");
-
                     b.Property<string>("Name");
 
                     b.HasKey("BookId");
 
-                    b.HasIndex("AuthorId");
-
                     b.ToTable("Books");
                 });
 
-            modelBuilder.Entity("GraphQLAPI.Library.Dal.Models.Book", b =>
+            modelBuilder.Entity("Library.Dal.Models.AuthorBook", b =>
                 {
-                    b.HasOne("GraphQLAPI.Library.Dal.Models.Author")
-                        .WithMany("Books")
-                        .HasForeignKey("AuthorId")
+                    b.Property<int>("AuthorAuthorId");
+
+                    b.Property<int>("BookBookId");
+
+                    b.Property<bool>("IsAuthor");
+
+                    b.HasKey("AuthorAuthorId", "BookBookId");
+
+                    b.HasIndex("BookBookId");
+
+                    b.ToTable("AuthorBook");
+                });
+
+            modelBuilder.Entity("Library.Dal.Models.AuthorBook", b =>
+                {
+                    b.HasOne("GraphQLAPI.Library.Dal.Models.Author", "Author")
+                        .WithMany("AuthorBooks")
+                        .HasForeignKey("AuthorAuthorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("GraphQLAPI.Library.Dal.Models.Book", "Book")
+                        .WithMany("AuthorBooks")
+                        .HasForeignKey("BookBookId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

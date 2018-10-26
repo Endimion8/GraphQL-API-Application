@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using GraphQLAPI.Library.Dal.Models;
 using GraphQLAPI.Library.Lib.Request;
 using GraphQLAPI.Library.Lib.Response;
+using Library.Lib.Request;
+using Library.Lib.Response;
 
 namespace GraphQLAPI.Library.Lib
 {
@@ -25,12 +27,14 @@ namespace GraphQLAPI.Library.Lib
 
         //Task<Dictionary<int, Book>> GetBooksByIdAsync(IEnumerable<int> bookIds, CancellationToken token);
 
-		Task<IEnumerable<BookResponse>> GetBooksByAuthorIdAsync(int authorId);
-		Task<ILookup<int, BookResponse>> GetBooksByAuthorIdsAsync(IEnumerable<int> authorIds);
-		Task<BookResponse> CreateBookAsync(BookCreateRequest book);
+		//Task<ILookup<int, BookResponse>> GetBooksByAuthorIdAsync(int authorId);
+		//Task<ILookup<int, BookResponse>> GetBooksByAuthorIdsAsync(IEnumerable<int> authorIds);
+        //Task<ILookup<int, BookResponse>> GetBooksInCoAuthoringByAuthorIdsAsync(IEnumerable<int> authorIds);
+        Task<BookResponse> CreateBookAsync(BookCreateRequest book);
         BookResponse UpdateBook(int bookId, BookUpdateRequest book);
         Task<BookResponse> DeleteBookAsync(int bookId);
         Task<BookResponse> DeleteBookByNameAsync(string bookName);
 
+        Task<AuthorBookResponse> AddBookToAuthor(AuthorBookCreateRequest authorBook);
     }
 }

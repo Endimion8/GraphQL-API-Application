@@ -11,7 +11,7 @@ namespace GraphQLAPI.Types
         {
             Field(x => x.BookId).Description("Id книги");
             Field(x => x.Name).Description("Название книги");
-            Field(x => x.AuthorId).Description("Id автора книги");
+            //Field(x => x.AuthorId).Description("Id автора книги");
         }
     }
 }

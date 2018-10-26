@@ -3,6 +3,7 @@ using GraphQLAPI.InputTypes;
 using GraphQLAPI.Library.Lib;
 using GraphQLAPI.Library.Lib.Request;
 using GraphQLAPI.Types;
+using Library.Lib.Request;
 
 namespace GraphQLAPI
 {
@@ -16,7 +17,8 @@ namespace GraphQLAPI
                 .ResolveAsync(async ctx =>
                 {
                     var book = ctx.GetArgument<BookCreateRequest>("book");
-                    return await libraryService.CreateBookAsync(book);
+                    var newBook = await libraryService.CreateBookAsync(book);
+                    return newBook;
                 });
 
             Field<BookType>()
@@ -84,6 +86,14 @@ namespace GraphQLAPI
                 {
                     var id = ctx.GetArgument<int>("id");
                     return await libraryService.DeleteAuthorAsync(id);
+                });
+            Field<AuthorBookType>()
+                .Name("addBookToAuthor")
+                .Argument<NonNullGraphType<BookToAuthorInputType>>("bookToAuthor", "book to autor")
+                .ResolveAsync(async ctx =>
+                {
+                    var bookAuthor = ctx.GetArgument<AuthorBookCreateRequest>("bookToAuthor");
+                    return await libraryService.AddBookToAuthor(bookAuthor);
                 });
         }
     }

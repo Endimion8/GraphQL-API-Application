@@ -8,8 +8,5 @@ namespace GraphQLAPI.Library.Lib.Response
         public int BookId { get; set; }
 
         public string Name { get; set; }
-
-        public int AuthorId { get; set; }
-
     }
 }

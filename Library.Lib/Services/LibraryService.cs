@@ -1,12 +1,13 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using GraphQLAPI.Library.Dal;
 using GraphQLAPI.Library.Dal.Models;
 using GraphQLAPI.Library.Lib.Request;
 using GraphQLAPI.Library.Lib.Response;
-using Library.Lib;
+using Library.Dal.Models;
+using Library.Lib.Request;
+using Library.Lib.Response;
 using Microsoft.EntityFrameworkCore;
 
 namespace GraphQLAPI.Library.Lib.Services
@@ -49,8 +50,7 @@ namespace GraphQLAPI.Library.Lib.Services
 
         public AuthorResponse UpdateAuthor(int authorId, AuthorUpdateRequest author)
         {
-            Mapper.Initialize(x => x.AddProfile(typeof(LibraryMappingProfile)));
-            var authorToUpdate = Mapper.Map<Author>(author);
+            var authorToUpdate = _mapper.Map<Author>(author);
             authorToUpdate.AuthorId = authorId;
 
             var updatedAuthor = _libraryContext.Authors.Update(authorToUpdate);
@@ -93,17 +93,29 @@ namespace GraphQLAPI.Library.Lib.Services
 			//return await _libraryContext.Books.Where(i => bookIds.Contains(i.BookId)).ToDictionaryAsync(x => x.BookId);
    //     }
 
-        public async Task<IEnumerable<BookResponse>> GetBooksByAuthorIdAsync(int authorId)
-        {
-            var books = await _libraryContext.Books.Where(o => o.AuthorId == authorId).ToListAsync();
-            return _mapper.Map<IReadOnlyList<BookResponse>>(books);
-		}
+  //      public async Task<ILookup<int, BookResponse>> GetBooksByAuthorIdAsync(int authorId)
+  //      {
+  //          var books = await _libraryContext.Books.Where(o => o.AuthorAuthorId == authorId).ToListAsync();
+  //          return _mapper.Map<IReadOnlyList<BookResponse>>(books).ToLookup(i => i.AuthorId);
+		//}
 
-        public async Task<ILookup<int, BookResponse>> GetBooksByAuthorIdsAsync(IEnumerable<int> authorIds)
-        {
-            var books = await _libraryContext.Books.Where(i => authorIds.Contains(i.AuthorId)).ToListAsync();
-            return _mapper.Map<IReadOnlyList<BookResponse>>(books).ToLookup(i => i.AuthorId);
-        }
+  //      public async Task<ILookup<int, BookResponse>> GetBooksByAuthorIdsAsync(IEnumerable<int> authorIds)
+  //      {
+  //          var books = await _libraryContext.Books.Where(i => authorIds.Contains(i.AuthorAuthorId)).ToListAsync();
+  //          return _mapper.Map<IReadOnlyList<BookResponse>>(books).ToLookup(i => i.AuthorId);
+  //      }
+
+        //public async Task<ILookup<int, BookResponse>> GetBooksInCoAuthoringByAuthorIdsAsync(IEnumerable<int> authorIds)
+        //{
+        //    var coAuthors = await _libraryContext.CoAuthorBooks.Where(x => authorIds.Contains(x.AuthorId)).ToArrayAsync();
+        //    int[] bookIds = new int[coAuthors.Length];
+        //    for (int i = 0; i < coAuthors.Length; i++)
+        //    {
+        //        bookIds[i] = coAuthors[i].BookId;
+        //    }
+        //    var books = await _libraryContext.Books.Where(x => bookIds.Contains(x.BookId)).ToListAsync();
+        //    return _mapper.Map<IReadOnlyList<BookResponse>>(books).ToLookup(i => i.AuthorId);
+        //}
 
         public async Task<BookResponse> CreateBookAsync(BookCreateRequest book)
         {
@@ -114,14 +126,13 @@ namespace GraphQLAPI.Library.Lib.Services
 
         public BookResponse UpdateBook(int bookId, BookUpdateRequest book)
         {
-            Mapper.Initialize(x => x.AddProfile(typeof(LibraryMappingProfile)));
-            var bookToUpdate = Mapper.Map<Book>(book);
+            var bookToUpdate = _mapper.Map<Book>(book);
             bookToUpdate.BookId = bookId;
 
             var updatedBook = _libraryContext.Books.Update(bookToUpdate);
             _libraryContext.SaveChanges();
 
-            return _mapper.Map<BookResponse>(updatedBook.Entity); ;
+            return _mapper.Map<BookResponse>(updatedBook.Entity);
         }
 
         public async Task<BookResponse> DeleteBookAsync(int bookId)
@@ -140,6 +151,20 @@ namespace GraphQLAPI.Library.Lib.Services
             await _libraryContext.SaveChangesAsync();
             return _mapper.Map<BookResponse>(book);
 
+        }
+
+        public async Task<AuthorBookResponse> AddBookToAuthor(AuthorBookCreateRequest authorBook)
+        {
+            var author = await _libraryContext.Authors.Include(a => a.AuthorBooks)
+                .FirstOrDefaultAsync(a => a.AuthorId == authorBook.AuthorId);
+            var ab = _mapper.Map<AuthorBook>(authorBook);
+            author.AuthorBooks.Add(ab);
+            await _libraryContext.SaveChangesAsync();
+            var resultAuthorBook = author.AuthorBooks.Find(x =>
+                x.AuthorAuthorId == authorBook.AuthorId
+                && x.BookBookId == authorBook.BookId);
+            var result = _mapper.Map<AuthorBookResponse>(resultAuthorBook);
+            return result;
         }
     }
 }

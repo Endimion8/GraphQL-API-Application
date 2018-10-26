@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Library.Dal.Models;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace GraphQLAPI.Library.Dal.Models
 {
@@ -9,7 +11,11 @@ namespace GraphQLAPI.Library.Dal.Models
 
         public string Name { get; set; }
 
-        public int AuthorId { get; set; }
+        public List<AuthorBook> AuthorBooks { get; set; }
 
+        public Book()
+        {
+            AuthorBooks = new List<AuthorBook>();
+        }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using GraphQLAPI.Library.Lib.Services;
 using Library.Dal;
-
+using Library.Lib;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,7 +14,7 @@ namespace GraphQLAPI.Library.Lib
         {
             services.AddLibraryDal(configuration);
 
-            services.AddAutoMapper();
+            services.AddAutoMapper(x => x.AddProfile(typeof(LibraryMappingProfile)));
             services.AddScoped<ILibraryService, LibraryService>();
             return services;
         }

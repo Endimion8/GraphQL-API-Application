@@ -12,7 +12,6 @@ namespace GraphQLAPI.InputTypes
             Description = "Модель обновления книги";
 
             Field(r => r.Name).Description("Название книги");
-            Field(r => r.AuthorId).Description("Id автора");
         }
     }
 }

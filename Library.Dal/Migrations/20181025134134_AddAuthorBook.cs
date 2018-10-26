@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Library.Dal.Migrations
 {
-    public partial class BooksRemoveAuthors : Migration
+    public partial class AddAuthorBook : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -28,33 +28,54 @@ namespace Library.Dal.Migrations
                 {
                     BookId = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    Name = table.Column<string>(nullable: true),
-                    AuthorId = table.Column<int>(nullable: false)
+                    Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Books", x => x.BookId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AuthorBook",
+                columns: table => new
+                {
+                    AuthorAuthorId = table.Column<int>(nullable: false),
+                    BookBookId = table.Column<int>(nullable: false),
+                    IsAuthor = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AuthorBook", x => new { x.AuthorAuthorId, x.BookBookId });
                     table.ForeignKey(
-                        name: "FK_Books_Authors_AuthorId",
-                        column: x => x.AuthorId,
+                        name: "FK_AuthorBook_Authors_AuthorAuthorId",
+                        column: x => x.AuthorAuthorId,
                         principalTable: "Authors",
                         principalColumn: "AuthorId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AuthorBook_Books_BookBookId",
+                        column: x => x.BookBookId,
+                        principalTable: "Books",
+                        principalColumn: "BookId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_AuthorId",
-                table: "Books",
-                column: "AuthorId");
+                name: "IX_AuthorBook_BookBookId",
+                table: "AuthorBook",
+                column: "BookBookId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Books");
+                name: "AuthorBook");
 
             migrationBuilder.DropTable(
                 name: "Authors");
+
+            migrationBuilder.DropTable(
+                name: "Books");
         }
     }
 }
