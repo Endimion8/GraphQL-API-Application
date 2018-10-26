@@ -16,6 +16,24 @@ namespace GraphQLAPI
                     return await libraryService.GetBooksAsync();
                 });
 
+            Field<ListGraphType<BookType>>()
+                .Name("booksByAuthorId")
+                .Argument<NonNullGraphType<IntGraphType>>("authorId", "author id")
+                .ResolveAsync(async ctx =>
+                {
+                    var id = ctx.GetArgument<int>("authorId");
+                    return await libraryService.GetBooksByAuthorId(id);
+                });
+
+            Field<ListGraphType<BookType>>()
+                .Name("booksByCoAuthorId")
+                .Argument<NonNullGraphType<IntGraphType>>("coAuthorId", "coAuthor id")
+                .ResolveAsync(async ctx =>
+                {
+                    var id = ctx.GetArgument<int>("coAuthorId");
+                    return await libraryService.GetBooksByCoAuthorId(id);
+                });
+
             Field<BookType>()
                 .Name("getBookById")
                 .Argument<NonNullGraphType<IntGraphType>>("id", "book id")
@@ -39,6 +57,15 @@ namespace GraphQLAPI
                 {
                     var id = ctx.GetArgument<int>("id");
                     return await libraryService.GetAuthorByIdAsync(id);
+                });
+
+            Field<ListGraphType<AuthorByBookIdType>>()
+                .Name("getAuthorsByBookId")
+                .Argument<NonNullGraphType<IntGraphType>>("id", "book id")
+                .ResolveAsync(async ctx =>
+                {
+                    var id = ctx.GetArgument<int>("id");
+                    return await libraryService.GetAuthorsByBookId(id);
                 });
         }
     }

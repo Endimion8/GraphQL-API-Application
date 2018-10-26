@@ -36,5 +36,8 @@ namespace GraphQLAPI.Library.Lib
         Task<BookResponse> DeleteBookByNameAsync(string bookName);
 
         Task<AuthorBookResponse> AddBookToAuthor(AuthorBookCreateRequest authorBook);
+        Task<IEnumerable<BookResponse>> GetBooksByAuthorId(int AuthorId);
+        Task<IEnumerable<BookResponse>> GetBooksByCoAuthorId(int CoAuthorId);
+        Task<IEnumerable<AuthorByBookIdResponse>> GetAuthorsByBookId(int BookId);
     }
 }

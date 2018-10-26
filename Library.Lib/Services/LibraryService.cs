@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using GraphQLAPI.Library.Dal;
@@ -158,6 +159,15 @@ namespace GraphQLAPI.Library.Lib.Services
             var author = await _libraryContext.Authors.Include(a => a.AuthorBooks)
                 .FirstOrDefaultAsync(a => a.AuthorId == authorBook.AuthorId);
             var ab = _mapper.Map<AuthorBook>(authorBook);
+
+            var existingAuthorBook = author.AuthorBooks.Find(x =>
+                 x.AuthorAuthorId == authorBook.AuthorId
+                 && x.BookBookId == authorBook.BookId);
+            if (existingAuthorBook != null)
+            {
+                return _mapper.Map<AuthorBookResponse>(existingAuthorBook);
+            }
+
             author.AuthorBooks.Add(ab);
             await _libraryContext.SaveChangesAsync();
             var resultAuthorBook = author.AuthorBooks.Find(x =>
@@ -165,6 +175,56 @@ namespace GraphQLAPI.Library.Lib.Services
                 && x.BookBookId == authorBook.BookId);
             var result = _mapper.Map<AuthorBookResponse>(resultAuthorBook);
             return result;
+        }
+
+        public async Task<IEnumerable<BookResponse>> GetBooksByAuthorId(int AuthorId)
+        {
+            var author = await _libraryContext.Authors.Include(a => a.AuthorBooks)
+                .FirstOrDefaultAsync(a => a.AuthorId == AuthorId);
+            var authorBooks = author.AuthorBooks.FindAll(ab => ab.AuthorAuthorId == AuthorId && ab.IsAuthor == true);
+            int[] bookIds = new int[authorBooks.Count];
+            for (int i = 0; i < authorBooks.Count; i++)
+            {
+                bookIds[i] = authorBooks[i].BookBookId;
+            }
+
+            var books = await _libraryContext.Books.Where(b => bookIds.Contains(b.BookId)).ToListAsync();
+            return _mapper.Map<List<BookResponse>>(books);
+        }
+        public async Task<IEnumerable<BookResponse>> GetBooksByCoAuthorId(int CoAuthorId)
+        {
+            var author = await _libraryContext.Authors.Include(a => a.AuthorBooks)
+                .FirstOrDefaultAsync(a => a.AuthorId == CoAuthorId);
+            var authorBooks = author.AuthorBooks.FindAll(ab => ab.AuthorAuthorId == CoAuthorId && ab.IsAuthor == false);
+            int[] bookIds = new int[authorBooks.Count];
+            for (int i = 0; i < authorBooks.Count; i++)
+            {
+                bookIds[i] = authorBooks[i].BookBookId;
+            }
+
+            var books = await _libraryContext.Books.Where(b => bookIds.Contains(b.BookId)).ToListAsync();
+            return _mapper.Map<List<BookResponse>>(books);
+        }
+
+        public async Task<IEnumerable<AuthorByBookIdResponse>> GetAuthorsByBookId(int BookId)
+        {
+            var book = await _libraryContext.Books.Include(b => b.AuthorBooks)
+                .FirstOrDefaultAsync(b => b.BookId == BookId);
+            var authorBooks = book.AuthorBooks.FindAll(ab => ab.BookBookId == BookId);
+            int[] authorIds = new int[authorBooks.Count];
+            for (int i = 0; i < authorBooks.Count; i++)
+            {
+                authorIds[i] = authorBooks[i].AuthorAuthorId;
+            }
+            var authors = await _libraryContext.Authors.Where(a => authorIds.Contains(a.AuthorId)).ToListAsync();
+            var authorsResponse = _mapper.Map<List<AuthorResponse>>(authors);
+            var authorsByBookId = new List<AuthorByBookIdResponse>();
+            for (int i = 0; i < authorIds.Length; i++)
+            {
+                authorsByBookId.Add(new AuthorByBookIdResponse(authorsResponse.Find(a => a.AuthorId == authorIds[i]), authorBooks.Find(ab => ab.AuthorAuthorId == authorIds[i]).IsAuthor));
+            }
+
+            return authorsByBookId;
         }
     }
 }
