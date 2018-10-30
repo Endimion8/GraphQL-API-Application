@@ -17,17 +17,17 @@ namespace GraphQLAPI.Library.Dal
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AuthorBook>()
-                .HasKey(t => new { t.AuthorAuthorId, t.BookBookId });
+                .HasIndex(t => new { t.AuthorAuthorId, t.BookBookId }).IsUnique();
 
-            modelBuilder.Entity<AuthorBook>()
-            .HasOne(sc => sc.Author)
-            .WithMany(s => s.AuthorBooks)
-            .HasForeignKey(sc => sc.AuthorAuthorId);
+            //modelBuilder.Entity<AuthorBook>()
+            //.HasOne(sc => sc.Author)
+            //.WithMany(s => s.AuthorBooks)
+            //.HasForeignKey(sc => sc.AuthorAuthorId);
 
-            modelBuilder.Entity<AuthorBook>()
-                .HasOne(sc => sc.Book)
-                .WithMany(c => c.AuthorBooks)
-                .HasForeignKey(sc => sc.BookBookId);
+            //modelBuilder.Entity<AuthorBook>()
+            //    .HasOne(sc => sc.Book)
+            //    .WithMany(c => c.AuthorBooks)
+            //    .HasForeignKey(sc => sc.BookBookId);
         }
     }
 }
